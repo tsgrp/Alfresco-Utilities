@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="af:contentmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>TSG Autofile Content Model</description>
+	<author>Tony Parzgnat</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<namespaces>
+		<namespace uri="http://www.tsgrp.com/model/autofile/1.0" prefix="af" />
+	</namespaces>
+
+	<constraints>
+
+	</constraints>
+
+	<!-- Custom Content types -->
+	<types>
+		<type name="af:autofileConfig">
+			<title>Autofile Configuration</title>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="af:rootPath">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:types">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:propertiesList">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:autoCreateFolders">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:autoCreateFolderType">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:lastAutoCreateFolderType">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:dateFormat">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:inheritDocPropertiesList">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:autoRenameDuplicates">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:criteriaProperties">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:criteriaRegexes">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:priority">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="af:sanitizePropValueRegex">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+			</associations>
+			<mandatory-aspects>
+			</mandatory-aspects>
+		</type>
+	</types>
+	
+	<aspects>
+		<aspect name="af:autofiled">
+			<title>Autofiled</title>
+			<properties>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

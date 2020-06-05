@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model name="tsg:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>TSG Object Model</description>
+	<author>Technology Services Group</author>
+	<version>1.0</version>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.alfresco.org/model/rendition/1.0" prefix="rn" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.tsgrp.com/model/tsg/1.0" prefix="tsg" />
+	</namespaces>
+
+	<!--
+		IMPORTANT NOTE: If you make any changes to this file, also update TSGModel.java with
+		the appropriate constants so we can use them throughout the code.
+	-->
+
+	<types>
+		<type name="tsg:template">
+            <title>TSG Template</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="tsg:targetType">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="tsg:templateType">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>tsg:renditioned</aspect>
+            </mandatory-aspects>
+        </type>
+
+		<type name="tsg:printToRepo">
+            <title>TSG Print To Repo</title>
+            <parent>tsg:template</parent>
+            <properties>
+                <property name="tsg:username">
+					<type>d:text</type>
+                </property>
+            </properties>
+            <mandatory-aspects>
+            </mandatory-aspects>
+        </type>
+        
+        <type name="tsg:captureTemplate">
+            <title>TSG Capture Template</title>
+            <parent>tsg:template</parent>
+            <properties>
+                <property name="tsg:captureModel">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="tsg:suggestrTemplateId">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <mandatory-aspects>
+            </mandatory-aspects>
+        </type>
+        
+		<!-- 
+			Attached to controlled documents that do not use an Active Wizard form.  
+			See awModel.xml for Approval Details for Docs associated with a form 
+		-->
+        <type name="tsg:approvalDetails">
+			<title>Approval Details</title>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+				<aspect>cm:versionable</aspect>
+			</mandatory-aspects>
+		</type>
+
+	</types>
+
+	<aspects>
+	
+		<aspect name="tsg:migrating">
+            <title>TSG Migrating</title>
+            <description>This is a node that is being migrated</description>
+        </aspect>
+
+		<!--
+			Aspect applied to types that should be auto renditioned.
+			Apply this to your types as necessary or set as a mandatory aspect.
+		-->
+		<aspect name="tsg:renditioned">
+			<title>TSG Renditioned Node</title>
+			<properties>
+				<property name="tsg:rendition">
+					<title>Rendition</title>
+					<type>d:content</type>
+					<index enabled="false">
+						<atomic>false</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="tsg:nativeMimetype">
+					<title>Native Mimetype</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:renditionMimetype">
+					<title>Rendition Mimetype</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<!--
+			Aspect applied to types that should NOT be auto renditioned - only apply this aspect
+			if you have a subset of docs that have the renditioned aspect that you want to override.
+			Otherwise it's probably not necessary.
+		-->
+		<aspect name="tsg:doNotAutoRender">
+			<title>Do Not Auto Render</title>
+		</aspect>
+		
+		<!-- Controlled types -->
+		<aspect name="tsg:controlled">
+			<title>TSG Controlled Document</title>
+			<associations>
+				<child-association name="tsg:approvalDetailsAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>tsg:approvalDetails</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+					<duplicate>false</duplicate>
+              		<propagateTimestamps>false</propagateTimestamps>
+				</child-association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>tsg:statusable</aspect>
+				<aspect>tsg:approvable</aspect>
+				<aspect>tsg:effectiveable</aspect>
+				<aspect>tsg:renditioned</aspect>
+				<aspect>tsg:periodicReviewable</aspect>
+				<aspect>tsg:departmentable</aspect>
+				<aspect>cm:titled</aspect>
+			</mandatory-aspects>
+		</aspect>
+		
+		<!-- Controlled Docs types -->
+		<aspect name="tsg:qualityControlled">
+			<title>TSG Quality Document</title>
+			<properties>
+				<property name="tsg:documentNumber">
+					<title>Document Number</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:documentCategory">
+					<title>Document Category</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Note: we do not want to use cm:owner since it affects permissions -->
+				<property name="tsg:documentOwner">
+					<title>Quality Document Owner</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:referenceDocuments">
+					<title>Reference Documents</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:documentRegion">
+					<title>Document Region</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:documentSite">
+					<title>Document Site</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:documentBusinessGroup">
+					<title>Document Business Group</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:chronicleId">
+					<title>Chronicle ID</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>			
+			</properties>
+			<associations>
+				<association name="tsg:legacySupersedes">
+					<title>Supersedes Association</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many> <!--must be true or you cannot checkout documents-->
+					</source>
+					<target>
+						<class>tsg:controlled</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>tsg:controlled</aspect>
+				<aspect>tsg:obsoleteable</aspect>
+			</mandatory-aspects>
+		</aspect>
+		
+		<aspect name="tsg:approvable">
+			<title>Approvable</title>
+			<properties>
+				<property name="tsg:approvedDate">
+					<title>Approved Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+			
+		<aspect name="tsg:effectiveable">
+			<title>Effectivable</title>
+			<properties>
+				<property name="tsg:effectiveDate">
+					<title>Effective Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="tsg:statusable">
+			<title>Statusable</title>
+			<properties>
+				<property name="tsg:status">
+					<title>Status</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>Draft</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="tsg:periodicReviewable">
+			<title>Periodic Reviewable</title>
+			<properties>
+				<property name="tsg:periodicReviewDate">
+					<title>Periodic Review Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="tsg:obsoleteable">
+			<title>Obsoleteable</title>
+			<properties>
+				<property name="tsg:obsoleteDate">
+					<title>Obsolete Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="tsg:departmentable">
+			<title>Departmentable</title>
+			<properties>
+				<property name="tsg:department">
+					<title>Department</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="tsg:contractable">
+			<title>Contractable</title>
+			<properties>
+				<property name="tsg:contractType">
+					<title>Contract Type</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractStartDate">
+					<title>Start Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractStatus">
+					<title>Contract Status</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractEndDate">
+					<title>End Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:renewalNotificationDate">
+					<title>Renewal Notification Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractTerms">
+					<title>Terms</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractVendorName">
+					<title>Vendor Name</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:contractVendorNumber">
+					<title>Vendor Number</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<!-- Security Aspects -->
+		
+		<aspect name="tsg:draft">
+			<title>Draft</title>
+		</aspect>
+		
+		<aspect name="tsg:inReview">
+			<title>In Review</title>
+		</aspect>
+		
+		<aspect name="tsg:pendingApproval">
+			<title>Pending Approval</title>
+		</aspect>
+		
+		<aspect name="tsg:approved">
+			<title>Approved</title>
+		</aspect>
+		
+		<aspect name="tsg:effective">
+			<title>Effective</title>
+		</aspect>
+		
+		<aspect name="tsg:inPeriodicReview">
+			<title>In Periodic Review</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityDraft">
+			<title>Draft</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityInReview">
+			<title>In Review</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityPendingApproval">
+			<title>Pending Approval</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityApproved">
+			<title>Approved</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityEffective">
+			<title>Effective</title>
+		</aspect>
+		
+		<aspect name="tsg:qualitySuperseded">
+			<title>Superseded</title>
+		</aspect>
+		
+		<aspect name="tsg:qualityObsolete">
+			<title>Obsolete</title>
+		</aspect>
+		<!-- maintaining these aspects for legacy compatibility -->
+		<aspect name="tsg:superseded">
+			<title>Superseded</title>
+		</aspect>
+		
+		<aspect name="tsg:obsolete">
+			<title>Obsolete</title>
+		</aspect>
+
+		<!-- Scanning/Ephesoft utility aspects -->
+		<!-- Applied to documents sent to a scanning or OCR tool's queue -->
+		<aspect name="tsg:ocrQueued">
+			<title>OCR Queued</title>
+			<properties>
+				<property name="tsg:ocrQueuedDate">
+					<type>d:datetime</type>
+				</property>
+				<property name="tsg:ocrQueuedCount">
+					<type>d:int</type>
+				</property>
+			</properties>
+		</aspect>
+
+		<!-- Applied to documents that have been OCRed -->
+		<aspect name="tsg:ocred">
+			<title>OCRed</title>
+			<properties>
+				<property name="tsg:ocredDate">
+					<type>d:datetime</type>
+				</property>
+			</properties>
+		</aspect>
+		
+		<!-- Applied to documents where groups are required to read the document -->
+		<aspect name="tsg:toBeRead">
+			<title>To Be Read</title>
+			<properties>
+				<property name="tsg:groupsToRead">
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="tsg:renditioning">
+			<title>Renditioning</title>
+			<properties>
+				<property name="tsg:urlOfRendition">
+					<type>d:text</type>
+				</property>
+				<property name="tsg:jobId">
+					<type>d:text</type>
+				</property>
+				<property name="tsg:renditionRetries">
+					<type>d:int</type>
+				</property>
+				<property name="tsg:renditionPriority">
+					<type>d:int</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="tsg:renditionFailed">
+			<title>Rendition Failed</title>
+			<description>This is a node that was unable to be renditioned.</description>
+		</aspect>
+	</aspects>  	
+</model>

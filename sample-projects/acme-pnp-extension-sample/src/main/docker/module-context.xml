@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- 
+        The TSG OpenContent module brings a lot more than just the models in, 
+            but for customizing the PaaS instance all you need is the model. 
+    -->
+    <bean id="com.tsgrp.openContent.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/extension/model/chainVersionableModel.xml</value>
+                <value>alfresco/extension/model/autofileModel.xml</value>
+                <value>alfresco/extension/model/tsgModel.xml</value>
+                <value>alfresco/extension/model/hpiModel.xml</value>
+                <value>alfresco/extension/model/awModel.xml</value>
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

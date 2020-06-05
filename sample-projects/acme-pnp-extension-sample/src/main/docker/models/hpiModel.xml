@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model name="hpi:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>HPI Object Model</description>
+	<author>Technology Services Group</author>
+	<version>1.0</version>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.tsgrp.com/model/tsg/1.0" prefix="tsg"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.tsgrp.com/model/hpi/1.0" prefix="hpi" />
+		<namespace uri="http://www.tsgrp.com/model/note/1.0" prefix="note" />
+		<namespace uri="http://www.tsgrp.com/model/email/1.0" prefix="email" />
+	</namespaces>
+
+	<!--
+		IMPORTANT NOTE: If you make any changes to this file, also update HPIModel.java with
+		the appropriate constants so we can use them throughout the code.
+	-->
+
+	<constraints>
+		<constraint name="hpi:collectionVisibilityConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Public</value>
+					<value>Private</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+
+		<type name="hpi:collection">
+			<title>HPI Collection</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="hpi:collectionVisibility">
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="hpi:collectionVisibilityConstraint" />
+					</constraints>
+				</property>
+				<property name="hpi:collectionSize">
+					<type>d:int</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="hpi:collectionItem">
+					<title>Associated Collection Items</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<!-- upload folder - specifies where uploads will occur -->
+		<type name="hpi:uploadFolder">
+			<title>HPI Upload Folder</title>
+			<parent>cm:folder</parent>
+		</type>
+
+		<!-- Real Alfresco renditions used for thumbnails and video previews in HPI -->
+		<type name="hpi:preview">
+			<title>HPI Preview Rendition</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="hpi:previewType">
+					<title>Preview Type</title>
+					<type>d:text</type>
+					<mandatory enforced="false">true</mandatory>
+					<constraints>
+						<constraint name="hpi:previewType-const" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>webHD</value>
+									<value>webSD</value>
+									<value>mobile</value>
+									<value>hpiPreview</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+		</type>
+
+		<type name="hpi:note">
+			<title>HPI Note</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="note:detail">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="note:type">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="note:attachment">
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="note:content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="note:visibilityType">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="hpi:email_message">
+			<title>HPI Email Message</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="email:bcc">
+					<title>BCC</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="email:cc">
+					<title>CC</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="email:from">
+					<title>From</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="email:to">
+					<title>To</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="email:subject">
+					<title>Subject</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>hpi:folderTaggable</aspect>
+			    <aspect>tsg:renditioned</aspect>
+			</mandatory-aspects>
+		</type>
+	
+		<type name="hpi:folder_addressbook">
+			<title>HPI Folder Address Book</title>
+			<parent>cm:content</parent>
+		</type>
+		
+		<type name="hpi:docuSignData">
+			<title>DocuSign Content Object</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="hpi:envelopeId">
+					<title>Envelope Id</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="hpi:outToDocuSign">
+					<title>Associated DocuSign Data</title>
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+		
+	</types>
+
+	<aspects>
+	
+		<aspect name="hpi:tagTrackingFolder">
+			<title>Tag Tracking Folder</title>
+			<properties>
+				<property name="hpi:completedRequiredTags">
+					<title>Completed Tags</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="hpi:requiredTags">
+					<title>Required Tags</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="hpi:remainingRequiredTags">
+					<title>Remaining Tags</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="hpi:requiredTagsComplete">
+					<title>Required Tags Completed</title>
+					<type>d:text</type>
+				
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="hpi:folderTaggable">
+			<title>HPI Taggable</title>
+			<properties>
+				<property name="hpi:folderTags">
+					<title>Folder Tags</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="hpi:googleDriveEditable">
+			<title>HPI Google Drive Editable</title>
+			<properties>
+				<property name="hpi:googleDriveId">
+					<title>Google Drive Id</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="hpi:applyPreviewRendition">
+			<title>Apply Preview Rendition</title>
+			<properties>
+				<property name="hpi:previewRenditionTitle">
+					<title>Preview Rendition Title</title>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="hpi:emailedAspect">
+			<title>Email Attached</title>
+			<associations>
+				<association name="hpi:emailed">
+					<title>Associated HPI Emails</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<aspect name="hpi:relatedAspect">
+			<title>Zip Attached</title>
+			<associations>
+				<association name="hpi:related">
+					<title>Associated HPI Zips</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		
+		<aspect name="hpi:folderNotesAspect">
+			<title>Folder Notes Aspect</title>
+			<associations>
+				<association name="hpi:folder_note">
+					<title>Associated Folder Notes</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>hpi:note</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		<aspect name="hpi:splitPDFAspect">
+			<title>Split PDF Aspect</title>
+			<associations>
+				<association name="hpi:childDocuments">
+				<title>Split PDF Children</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		<aspect name="hpi:indexable">
+			<title>Indexable Aspect</title>
+			<properties>
+				<property name="hpi:indexStartedTime">
+                    <title>Index Started Time</title>
+                    <type>d:datetime</type>
+                    <multiple>true</multiple>
+                </property>
+                <property name="hpi:indexFinishedTime">
+                    <title>Index Finished Time</title>
+                    <type>d:datetime</type>
+                    <multiple>true</multiple>
+                </property>
+                <property name="hpi:indexedBy">
+                    <title>Indexed By</title>
+                    <type>d:text</type>
+                    <multiple>true</multiple>
+                </property>
+                <property name="hpi:indexStatus">
+                    <title>Index Status</title>
+                    <type>d:text</type>
+                </property>
+                <property name="hpi:indexQueue">
+                    <title>Index Queue</title>
+                    <type>d:text</type>
+                </property>
+                <property name="hpi:pageRange">
+                    <title>Page Range</title>
+                    <type>d:text</type>
+                    <multiple>true</multiple>
+                </property>
+			</properties>
+		</aspect>
+		<aspect name="hpi:captureData">
+			<title>Additional Capture Data</title>
+			<properties>
+				<property name="hpi:metadataPositions">
+					<title>Text metadata positions</title>
+					<type>d:text</type>
+				</property>
+				<property name="hpi:suggestrDocId">
+					<title>SuggestR Document Id</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

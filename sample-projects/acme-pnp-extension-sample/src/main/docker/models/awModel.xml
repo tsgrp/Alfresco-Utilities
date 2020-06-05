@@ -1,0 +1,822 @@
+<!--Definition of Custom ActiveWizard Object Model-->
+<model name="aw:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Active Wizard Model</description>
+	<author>Technology Services Group</author>
+	<version>1.0</version>
+
+	<imports>
+		<!--Import Alfresco Definitions-->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.tsgrp.com/model/tsg/1.0" prefix="tsg"/>
+		<import uri="http://www.tsgrp.com/model/hpi/1.0" prefix="hpi"/>
+		<import uri="http://www.tsgrp.com/model/versioning/1.0" prefix="cvn"/>
+		<import uri="http://www.tsgrp.com/model/autofile/1.0" prefix="af"/>
+		
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.activewizard.com/model/content/1.0" prefix="aw" />
+	</namespaces>
+
+	<types>
+		<type name="aw:auditEvent">
+			<title>Audit Event</title>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:eventName">
+					<title>Event Name</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:auditedObject">
+					<title>Audited Object</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:auditObjectVersion">
+					<title>Audited Object Version</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:user">
+					<title>User</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:auditedRoleName">
+					<title>Audited Role Name</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:eventDescription">
+					<title>Event Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:extraLabel">
+					<title>Extra Label</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:extraValue">
+					<title>Extra Value</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:versionable</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:doc">
+			<title>Wizard Document</title>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+			<associations>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+				<aspect>cm:versionable</aspect>
+				<aspect>aw:auditable</aspect>
+				<aspect>tsg:statusable</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:psi_autonumber">
+			<title>PSI Autonumber</title>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:prefix">
+					<title>Prefix</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:suffix">
+					<title>Suffix</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:nextNumber">
+					<title>Next Number</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:page_set">
+			<title>Page Set XML</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:activeVersionLabel">
+					<title>Active Version Label</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:publishedComment">
+					<title>Published Comment</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			    <aspect>aw:commonPageSetAttributes</aspect>
+			    <aspect>tsg:doNotAutoRender</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:page_set_definition">
+			<title>Page Set Definition XML</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:activePageSetVersion">
+					<title>Active Page Set Version</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="aw:pageSetActivities">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>aw:ps_activities</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="aw:pageSetRole">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>aw:wf_role</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			    <aspect>aw:commonPageSetAttributes</aspect>
+			    <aspect>tsg:doNotAutoRender</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:page">
+			<title>Page XML</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:category">
+					<title>Category</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:description">
+					<title>Page Description</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:pageId">
+					<title>Page ID</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:psi">
+			<title>Page Set Instance</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="aw:microState">
+					<title>Micro State</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:isTestPSI">
+					<title>Is Test PSI</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:isNewPSI">
+					<title>Is New PSI</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<child-association name="aw:workflowDefinitionAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>aw:workflowDefinition</class>
+						<!-- Ideally this would be set to true, but since we create and relate in two transactions this will bomb if true -->
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+					<duplicate>false</duplicate>
+              		<propagateTimestamps>false</propagateTimestamps>
+				</child-association>
+				<child-association name="aw:approvalDetailsAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>aw:approvalDetails</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+					<duplicate>false</duplicate>
+              		<propagateTimestamps>false</propagateTimestamps>
+				</child-association>
+				<association name="aw:workflowDocument">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="aw:supportingDocument">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>aw:attached_doc</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:ownable</aspect>
+			    <aspect>aw:closable</aspect>
+			    <aspect>aw:hasPageSetName</aspect>
+			    <aspect>aw:related</aspect>
+			    <aspect>aw:commonPageSetAttributes</aspect>
+			    <aspect>tsg:approvable</aspect>
+			    <aspect>tsg:doNotAutoRender</aspect>
+			    <aspect>tsg:renditioned</aspect>
+			    <aspect>tsg:statusable</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:query">
+			<title>AW Query</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+		</type>
+		<type name="aw:checklist_rules">
+			<title>Checklist Rules</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:attached_doc">
+			<title>Attached Document</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>tsg:renditioned</aspect>
+			    <aspect>aw:hasIsAdHoc</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:adobe_map_xml">
+			<title>Adobe Map</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+			    <aspect>aw:hasPageSetName</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="aw:blank_adobe_form">
+			<title>Blank Adobe Form</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+		</type>
+		<type name="aw:wf_activities">
+			<title>Workflow Activities</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+			</properties>
+		</type>
+		<type name="aw:ps_activities">
+			<title>Workflow Activities</title>
+			<parent>aw:wf_activities</parent>
+			<archive>false</archive>
+			<!-- Note: no pageSetName attribute because a relationship exists between the page set definition (parent) and page set activities objects (children) -->
+			<properties>
+			</properties>
+		</type>
+		<type name="aw:wf_role">
+			<title>WF Role</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<!-- Note: no pageSetName (or page_sets in AW4.x) attribute because a relationship exists between the page set definition (parent) and role objects (children) -->
+			<properties>
+				<property name="aw:objectTypes">
+					<title>Object Types</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:priority">
+					<title>Priority</title>
+					<type>d:int</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:roleName">
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:roleOwner">
+					<title>Role Owner</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:roleType">
+					<title>Role Type</title>
+					<type>d:text</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+		    <mandatory-aspects>
+			    <aspect>tsg:doNotAutoRender</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="aw:workflowDefinition">
+			<title>Wizard Workflow Definition</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				
+			</properties>
+		</type>
+		<type name="aw:approvalDetails">
+			<title>Approval Details</title>
+			<parent>aw:doc</parent>
+			<archive>false</archive>
+			<properties>
+				
+			</properties>
+		</type>
+		
+		<!-- type for legacy non-chain versionable controlled docs -->
+		<type name="aw:legacyControlledDocument">
+			<title>Legacy Controlled Document</title>
+			<parent>aw:doc</parent>
+			<properties>
+				
+			</properties>
+			<mandatory-aspects>				
+				<aspect>tsg:controlled</aspect>
+				<aspect>aw:auditable</aspect>
+				<aspect>tsg:toBeRead</aspect>
+			</mandatory-aspects>
+		</type>
+		
+		<!-- type for chain versionable controlled docs -->
+		<type name="aw:controlledDocument">
+			<title>Controlled Document</title>
+			<parent>aw:doc</parent>
+			<properties>
+				
+			</properties>
+			<mandatory-aspects>				
+				<aspect>tsg:controlled</aspect>
+				<aspect>aw:auditable</aspect>
+				<aspect>tsg:toBeRead</aspect>
+				<aspect>cm:versionable</aspect>
+				<aspect>cvn:chainVersionable</aspect>
+				<aspect>af:autofiled</aspect>
+			</mandatory-aspects>
+		</type>
+		
+		<!-- type for legacy non-chain versionable quality documents -->
+		<type name="aw:legacyQualityDocument">
+			<title>Legacy Quality Document</title>
+			<parent>aw:legacyControlledDocument</parent>
+			<properties>
+				
+			</properties>
+			<mandatory-aspects>				
+				<aspect>tsg:qualityControlled</aspect>
+				<aspect>aw:auditable</aspect>
+			</mandatory-aspects>
+		</type>
+		
+			<!-- type for chain versionable quality documents -->
+		<type name="aw:qualityDocument">
+			<title>Quality Document</title>
+			<parent>aw:controlledDocument</parent>
+			<properties>
+				
+			</properties>
+			<mandatory-aspects>				
+				<aspect>tsg:qualityControlled</aspect>
+				<aspect>aw:auditable</aspect>
+				<aspect>cm:versionable</aspect>
+				<aspect>cvn:chainVersionable</aspect>
+				<aspect>af:autofiled</aspect>
+			</mandatory-aspects>
+		</type>
+		
+		<!-- type for OOB contract documents -->
+		<type name="aw:contractDocument">
+			<title>Contract Document</title>
+			<parent>aw:controlledDocument</parent>
+			<properties>
+				<property name="aw:clauseOne">
+					<title>Clause One</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:clauseTwo">
+					<title>Clause Two</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:clauseThree">
+					<title>Clause Three</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="aw:contractLessee">
+					<title>Lessee</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="tsg:locationsCovered">
+					<title>Locations</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>				
+			</properties>
+			<mandatory-aspects>				
+				<aspect>tsg:controlled</aspect>
+				<aspect>tsg:contractable</aspect>
+				<aspect>hpi:folderTaggable</aspect>
+				<aspect>aw:auditable</aspect>
+			</mandatory-aspects>
+		</type>
+			
+	</types>
+	<aspects>
+		<aspect name="aw:hasIsAdHoc">
+			<title>Is Ad Hoc Document</title>
+			<properties>
+				<property name="aw:isAdHoc">
+					<title>Is Ad Hoc Document</title>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:hasPageSetName">
+			<title>Has Page Set Name</title>
+			<properties>
+				<property name="aw:pageSetName">
+					<title>Page Set Name</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:commonPageSetAttributes">
+			<title>Common Page Set Attributes</title>
+			<properties>
+				<property name="aw:pageSetInstanceType">
+					<title>Page Set Instance Type</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:outputType">
+					<title>Output Type</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="aw:workflowActive">
+					<title>Workflow Active</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="aw:formDraft">
+			<title>Draft</title>
+			<properties>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:formInReview">
+			<title>In Review</title>
+			<properties>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:formPendingApproval">
+			<title>Pending Approval</title>
+			<properties>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:formApproved">
+			<title>Approved</title>
+			<properties>
+			</properties>
+		</aspect>
+
+		<aspect name="aw:formClosed">
+			<title>Closed</title>
+			<properties>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:formCancelled">
+			<title>Cancelled</title>
+			<properties>
+			</properties>
+		</aspect>
+		
+		<aspect name="aw:closable">
+			<title>Closable</title>
+			<properties>
+				<property name="aw:closedDate">
+					<title>Closed Date</title>
+					<type>d:date</type>
+					<multiple>false</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored> 
+						<tokenised>true</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="aw:auditable">
+			<title>Auditable</title>
+			<associations>
+				<association name="aw:auditedBy">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>aw:auditEvent</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		
+		<aspect name="aw:related">
+			<title>Related</title>
+			<associations>
+				<association name="aw:relatedTo">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>aw:psi</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+			
+	</aspects>
+	
+</model>
